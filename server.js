@@ -6,7 +6,10 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs'); 
 
 const app = express();
-const port = 5500;
+
+// --- 1. UPDATED PORT FOR HOSTING ---
+// Railway provides a dynamic port. Using 0.0.0.0 ensures it's reachable.
+const port = process.env.PORT || 5500;
 
 // Middleware
 app.use(cors()); 
@@ -14,12 +17,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- DATABASE CONNECTION ---
+// --- 2. UPDATED DATABASE CONNECTION ---
+// We replace 'localhost' and 'root' with the Railway variables you linked.
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root', 
-    database: 'scholars_hub'
+    host: process.env.MYSQLHOST,
+    user: process.env.MYSQLUSER,
+    password: process.env.MYSQLPASSWORD,
+    database: process.env.MYSQLDATABASE,
+    port: process.env.MYSQLPORT
 });
 
 db.connect((err) => {
@@ -27,7 +32,7 @@ db.connect((err) => {
         console.error('❌ Database Connection Failed:', err.message);
         return;
     }
-    console.log('✅ Connected to MySQL database');
+    console.log('✅ Connected to Railway MySQL database');
 });
 
 // --- SIGNUP ROUTE ---
@@ -52,8 +57,6 @@ app.post('/api/signup', async (req, res) => {
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
 
-    // 1. HARDCODED ADMIN CHECK (PRIORITY)
-    // This stops the code before it ever looks in the database
     if (email === 'admin@gmail.com' && password === 'admin123') {
         return res.json({ 
             success: true, 
@@ -61,13 +64,11 @@ app.post('/api/login', (req, res) => {
         });
     }
 
-    // 2. STUDENT CHECK (In Database)
     db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
         if (err) return res.status(500).json({ success: false, message: 'Database error' });
         
         if (results.length > 0) {
             const user = results[0];
-            // Compare entered password with hashed password in DB
             const isMatch = await bcrypt.compare(password, user.password);
             
             if (isMatch) {
@@ -91,11 +92,7 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// ==========================
-//      ADMIN DASHBOARD ROUTES
-// ==========================
-
-// Get all students for Admin Table
+// --- ADMIN DASHBOARD ROUTES ---
 app.get('/api/users', (req, res) => {
     db.query('SELECT id, full_name, email, course, status, fee_status FROM users', (err, results) => {
         if (err) return res.status(500).send(err);
@@ -110,7 +107,6 @@ app.get('/api/users', (req, res) => {
     });
 });
 
-// Accept a student
 app.put('/api/users/:id/accept', (req, res) => {
     db.query('UPDATE users SET status = "Accepted" WHERE id = ?', [req.params.id], (err) => {
         if (err) return res.status(500).send(err);
@@ -118,7 +114,6 @@ app.put('/api/users/:id/accept', (req, res) => {
     });
 });
 
-// Delete a student
 app.delete('/api/users/:id', (req, res) => {
     db.query('DELETE FROM users WHERE id = ?', [req.params.id], (err) => {
         if (err) return res.status(500).send(err);
@@ -126,10 +121,7 @@ app.delete('/api/users/:id', (req, res) => {
     });
 });
 
-// ==========================
-//   CURRICULUM & EXAM ROUTES
-// ==========================
-
+// --- CURRICULUM & EXAM ROUTES ---
 app.get('/api/curriculum/:course', (req, res) => {
     const course = req.params.course;
     db.query('SELECT * FROM subjects WHERE course_name = ?', [course], (err, subjects) => {
@@ -144,6 +136,12 @@ app.get('/api/curriculum/:course', (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`🚀 Server running at http://localhost:${port}`);
+// Serve frontend for the root URL
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// --- 3. UPDATED LISTEN COMMAND ---
+app.listen(port, '0.0.0.0', () => {
+    console.log(`🚀 Server running live on port ${port}`);
 });
