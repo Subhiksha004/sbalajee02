@@ -7,8 +7,8 @@ const bcrypt = require('bcryptjs');
 
 const app = express();
 
-// --- 1. UPDATED PORT FOR HOSTING ---
-// Railway provides a dynamic port. Using 0.0.0.0 ensures it's reachable.
+// --- 1. DYNAMIC PORT FOR RAILWAY ---
+// Railway assigns a port automatically; 0.0.0.0 ensures external reachability.
 const port = process.env.PORT || 5500;
 
 // Middleware
@@ -17,8 +17,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- 2. UPDATED DATABASE CONNECTION ---
-// We replace 'localhost' and 'root' with the Railway variables you linked.
+// --- 2. LIVE DATABASE CONNECTION ---
+// Uses the variables you linked in the Railway dashboard.
 const db = mysql.createConnection({
     host: process.env.MYSQLHOST,
     user: process.env.MYSQLUSER,
@@ -136,12 +136,13 @@ app.get('/api/curriculum/:course', (req, res) => {
     });
 });
 
-// Serve frontend for the root URL
-app.get('*', (req, res) => {
+// --- 3. FIXED WILDCARD ROUTE ---
+// Wrapping '*' in '(*)' is required by Node v22/Express to prevent the PathError.
+app.get('(*)', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// --- 3. UPDATED LISTEN COMMAND ---
+// --- 4. START SERVER ---
 app.listen(port, '0.0.0.0', () => {
     console.log(`🚀 Server running live on port ${port}`);
 });
