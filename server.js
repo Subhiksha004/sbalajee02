@@ -138,7 +138,7 @@ app.get('/api/curriculum/:course', (req, res) => {
 
 // --- 3. FIXED WILDCARD ROUTE ---
 // Wrapping '*' in '(*)' is required by Node v22/Express to prevent the PathError.
-app.get('(*)', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
