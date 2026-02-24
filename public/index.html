@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sree Balajee Scholars Hub</title>    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+    <div class="container top-bar-content">
+        <div class="contact-info">
+            <span>
+                <a href="tel:+916362401110" style="color: inherit; text-decoration: none;">
+                    <i class="fas fa-phone-alt"></i> +91 9902054254
+                </a>
+            </span>
+            
+            <span>
+                <a href="mailto:SBalajee.edu@gmail.com" style="color: inherit; text-decoration: none;">
+                    <i class="fas fa-envelope"></i> SBalajee.edu@gmail.com
+                </a>
+            </span>
+        </div>
+        <div class="trust-badge">Trusted Education Partner Since 2013</div>
+    </div>
+</div>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+           <div class="logo" style="display: flex; align-items: center; gap: 12px;">
+            <img src="logo.png" alt="Sree Balajee logo" style="height: 80px; width: auto; object-fit: contain;">
+              <span>Sree Balajee Scholars Hub</span>
+              </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#programs">Programs</a></li>
+                <li><a href="#process">Work Process</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li id="loginNavItem">
+                    <a href="login.html" class="btn-login-nav">Login</a>
+                </li>
+
+                <li id="profileNavItem" class="hidden" style="position: relative;">
+                    <div class="profile-icon" onclick="toggleDropdown()" style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                        <img id="navProfileImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+                        <span id="navUserName" style="color: #333; font-weight: 600;">User</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.8rem; color: #555;"></i>
+                    </div>
+
+                    <div id="profileDropdown" class="hidden" style="position: absolute; top: 120%; right: 0; background: white; width: 280px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); border-radius: 12px; padding: 20px; z-index: 1000; border: 1px solid #eee;">
+                        
+                        <div style="text-align: center; margin-bottom: 15px; position: relative;">
+                             <img id="dropdownProfileImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #1a56db;">
+                             <label for="imageUpload" style="position: absolute; bottom: 0; right: 35%; background: #1a56db; color: white; border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid white;">
+                                <i class="fas fa-camera" style="font-size: 0.7rem;"></i>
+                             </label>
+                             <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="uploadImage(event)">
+                        </div>
+
+                        <div style="text-align: center; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px;">
+                             <h4 id="dropdownName" style="margin: 0; color: #333;">User Name</h4>
+                             <p id="dropdownCourse" style="margin: 5px 0; color: #1a56db; font-weight: 600; font-size: 0.9rem;">Course Name</p>
+                             <p id="dropdownPhone" style="font-size: 0.85rem; color: #777; margin: 0;"><i class="fas fa-phone-alt"></i> +91 XXXXX</p>
+                        </div>
+
+                        <button onclick="logout()" style="width: 100%; padding: 10px; background: #fee2e2; color: #dc2626; border: none; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600;">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero-section">
+    <div class="container hero-container">
+        <div class="hero-text">
+            <div class="hero-icon"><i class="fas fa-graduation-cap"></i></div>
+            <h1>Welcome to Sree Balajee Scholars Hub</h1>
+            <p>Your Trusted Partner in Education. We guide students towards quality education through transparent guidance, reliable admissions support, and continuous mentorship.</p>
+            <div class="contact-details-hero">
+                <p><a href="tel:+916362401110" style="color: inherit; text-decoration: none;"><i class="fas fa-phone-alt"></i> +91 6362401110</a></p>
+            </div>
+        </div>
+        
+        <div class="hero-form-card">
+            <h3>Start Your Journey Today</h3>
+            <form onsubmit="sendToWhatsApp(event)">
+                <label>Full Name *</label>
+                <input type="text" id="wa-name" placeholder="Enter your name" required>
+                
+                <label>Email Address *</label>
+                <input type="email" id="wa-email" placeholder="your.email@example.com" required>
+                
+                <label>Phone Number *</label>
+                <input type="tel" id="wa-phone" placeholder="+91 XXXXX XXXXX" required>
+                
+                <label>Interested Course *</label>
+                <select id="wa-course" required>
+                    <option value="" disabled selected>Select a course</option>
+                    <option value="BA">BA</option>
+                    <option value="BCom">BCom</option>
+                    <option value="BCA">BCA</option>
+                    <option value="BBA">BBA</option>
+                    <option value="MA">MA</option>
+                    <option value="MCom">MCom</option>
+                    <option value="MCA">MCA</option>
+                    <option value="MBA">MBA</option>
+                    <option value="Diploma">Diploma</option>
+                    <option value="PGDiploma">PGDiploma</option>
+                </select>
+                
+                <button type="submit" class="btn-primary">Get Started Now</button>
+            </form>
+        </div>
+    </div> </section> <section id="programs" class="section-padding bg-light">
+    <div class="container">
+        <h2 class="section-title">Our Programs</h2>
+        <p class="section-subtitle">Explore a wide range of academic programs offered in collaboration with renowned universities</p>
+        
+        <div class="programs-grid">
+            <div class="program-card">
+                <i class="fas fa-graduation-cap card-icon"></i>
+                <h3>Undergraduate Programs</h3>
+                <p>Foundational degree programs across Arts, Science, and Management.</p>
+                <div class="tags">
+                    <span onclick="showCourse('BA')">BA</span>
+                    <span onclick="showCourse('BCom')">BCom</span>
+                    <span onclick="showCourse('BCA')">BCA</span>
+                    <span onclick="showCourse('BBA')">BBA</span>
+                </div>
+            </div>
+
+            <div class="program-card">
+                <i class="fas fa-book-reader card-icon"></i>
+                <h3>Postgraduate Programs</h3>
+                <p>Advanced master's programs for specialized career growth.</p>
+                <div class="tags">
+                    <span onclick="showCourse('MA')">MA</span>
+                    <span onclick="showCourse('MCom')">MCom</span>
+                    <span onclick="showCourse('MCA')">MCA</span>
+                    <span onclick="showCourse('MBA')">MBA</span>
+                </div>
+            </div>
+
+            <div class="program-card">
+                <i class="fas fa-file-alt card-icon"></i>
+                <h3>Diploma Programs</h3>
+                <p>Short-term professional courses for skill development.</p>
+                <div class="tags">
+                    <span onclick="showCourse('Diploma')">Diploma Courses</span>
+                    <span onclick="showCourse('PGD')">PG Diploma</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="university-partner" style="margin-top: 50px; text-align: center;">
+            <h3>University Partnership</h3>
+            <div class="uni-badge" style="display: inline-block; padding: 20px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px;">
+                <h4>Acharya Nagarjuna University (ANU)</h4>
+                <p style="margin: 0; color: #1a56db; font-weight: 600;">Recognized & Accredited Institution</p>
+            </div>
+            <p class="uni-desc" style="max-width: 800px; margin: 0 auto;">We proudly partner with Nagarjuna University to ensure students receive recognized degrees and excellent academic support.</p>
+        </div>
+    </div> </section>
+<div id="courseModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: white; padding: 40px; border-radius: 20px; max-width: 500px; width: 100%; position: relative; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+        <span onclick="closeModal()" style="position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: #666;">&times;</span>
+        <div style="background: #eef2ff; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <i class="fas fa-info-circle" style="color: #1a56db; font-size: 2rem;"></i>
+        </div>
+        <h2 id="modalTitle" style="color: #1a56db; margin-bottom: 15px; font-weight: 700;">Course Name</h2>
+        <p id="modalDescription" style="color: #444; line-height: 1.6; font-size: 1.05rem;">Description...</p>
+        <button onclick="closeModal()" class="btn-primary" style="margin-top: 25px; width: 100%;">Got it, thanks!</button>
+    </div>
+</div>
+        </div>
+    </section>
+
+    <section id="process" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">Our Work Process</h2>
+            <p class="section-subtitle">A comprehensive, student-first approach ensuring a smooth journey from application to graduation</p>
+            
+            <div class="process-grid">
+                <div class="process-card">
+                    <div class="step-number">1</div>
+                    <i class="far fa-comments"></i>
+                    <h4>Detailed Counseling & Course Guidance</h4>
+                    <p>Personalized counseling sessions to understand your academic goals and recommend the best-fit programs.</p>
+                </div>
+                <div class="process-card">
+                    <div class="step-number">2</div>
+                    <i class="far fa-check-circle"></i>
+                    <h4>University Approvals & Program Information</h4>
+                    <p>Complete information about approved programs, eligibility criteria, fee structure, and course duration.</p>
+                </div>
+                <div class="process-card">
+                    <div class="step-number">3</div>
+                    <i class="far fa-file-alt"></i>
+                    <h4>Smooth Application & Admission Process</h4>
+                    <p>End-to-end support for application submission, documentation, and admission formalities.</p>
+                </div>
+                <div class="process-card">
+                    <div class="step-number">4</div>
+                    <i class="fas fa-user-check"></i>
+                    <h4>Document Verification & Enrollment Support</h4>
+                    <p>Thorough document verification process and enrollment assistance to ensure your admission is processed correctly.</p>
+                </div>
+                <div class="process-card">
+                    <div class="step-number">5</div>
+                    <i class="far fa-bell"></i>
+                    <h4>Regular Updates to Agents and Students</h4>
+                    <p>Consistent communication and status updates throughout the admission process to keep everyone informed.</p>
+                </div>
+                <div class="process-card">
+                    <div class="step-number">6</div>
+                    <i class="far fa-file-alt"></i>
+                    <h4>Assistance with Marks Cards & Transcripts</h4>
+                    <p>Support for obtaining marks cards, transcripts, grade sheets, and other academic documents as needed.</p>
+                </div>
+                <div class="process-card">
+                    <div class="step-number">7</div>
+                    <i class="fas fa-medal"></i>
+                    <h4>Convocation Guidance & Continued Support</h4>
+                    <p>Complete guidance for convocation ceremonies and ongoing support until successful course completion.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="vision-banner">
+        <div class="container">
+            <h3>Our Vision</h3>
+            <p>At Sree Balajee Scholars Hub, we believe education is the foundation of success. Our commitment, professionalism, and transparent process have earned us recognition as a reliable educational partner for students across India. We continue to grow with a vision to empower students and build strong academic futures.</p>
+        </div>
+    </section>
+
+ <section id="about" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">About Us</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p><strong>Sree Balajee Scholars Hub</strong> is a trusted education consultancy dedicated to guiding students towards the right academic and career opportunities. Established under <strong>Sree Balaji Educational Charitable Trust</strong>, our mission is to support learners in achieving quality education through transparent guidance, reliable admissions support, and continuous mentorship.</p>
+                    <p>We proudly collaborate with reputed universities such as <strong>Nagarjuna University</strong>, offering a wide range of UG, PG, Diploma, Technical, and Professional programs. With strong university partnerships and a student-first work process, we ensure a smooth admission experience from counseling to enrollment.</p>
+                </div>
+                <div class="about-features">
+                    <div class="feature-card">
+                        <i class="fas fa-book-open"></i>
+                        <h4>Quality Education</h4>
+                        <p>Access to top universities and programs</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-bullseye"></i>
+                        <h4>Career Focused</h4>
+                        <p>Programs aligned with industry needs</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-user-friends"></i>
+                        <h4>Expert Guidance</h4>
+                        <p>Personalized counseling support</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-certificate"></i>
+                        <h4>Trusted Partner</h4>
+                        <p>Recognized for reliability and transparency</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Ready to Begin Your Educational Journey?</h2>
+            <p>Contact us today for free counseling and personalized guidance. Our team is here to help you every step of the way.</p>
+            <a href="#home" class="btn-white" style="text-decoration: none; display: inline-block;">Enquire</a>
+        </div>
+    </div>
+</section>
+
+    <section id="testimonials" class="section-padding bg-light">
+        <div class="container">
+            <h2 class="section-title">Student Success Stories</h2>
+            <p class="section-subtitle">Hear from our satisfied students about their experience with us</p>
+
+            <div class="testimonials-grid">
+                <div class="testi-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <i class="fas fa-quote-right quote-icon"></i>
+                    <p>"Sree Balajee Scholars Hub made my admission process incredibly smooth. Their guidance and support were exceptional throughout my journey."</p>
+                    <div class="student-info">
+                        <h4>Rajesh Kumar</h4>
+                        <span>MBA Graduate</span>
+                    </div>
+                </div>
+
+                <div class="testi-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <i class="fas fa-quote-right quote-icon"></i>
+                    <p>"The counseling I received helped me choose the perfect course. The team was always available to answer my questions and concerns."</p>
+                    <div class="student-info">
+                        <h4>Priya Sharma</h4>
+                        <span>BCA Student</span>
+                    </div>
+                </div>
+
+                <div class="testi-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <i class="fas fa-quote-right quote-icon"></i>
+                    <p>"Excellent service from start to finish. They handled all my documents professionally and kept me updated at every step."</p>
+                    <div class="student-info">
+                        <h4>Arun Reddy</h4>
+                        <span>MSc Graduate</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <h3>Sree Balajee Scholars Hub</h3>
+                <p>A trusted education consultancy dedicated to guiding students towards the right academic and career opportunities.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#programs">Programs</a></li>
+                    <li><a href="#process">Work Process</a></li>
+                    <li><a href="#about">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+            <p>
+                <a href="tel:+916362401110">
+                <i class="fas fa-phone-alt"></i> +91 9902054254
+                </a>
+            </p>
+        <p>
+           <a href="mailto:SBalajee.edu@gmail.com" style="text-decoration: none; color: inherit;">
+            <i class="fas fa-envelope"></i> SBalajee.edu@gmail.com
+           </a>
+       </p> 
+<p>
+  <a href="https://www.google.com/maps/search/?api=1&query=Sree+Balajee+Scholars+Inkollu+Bapatla+Andhra+Pradesh+523167" target="_blank" style="text-decoration: none; color: inherit;">
+    <i class="fas fa-map-marker-alt"></i> Sree Balajee Scholars, Inkollu, Bapatla, Andhra Pradesh - 523167
+  </a>
+</p>            </div>
+        </div>
+        <footer style="text-align: center; padding: 20px; font-size: 0.9rem; line-height: 1.6;">
+    <p>&copy; 2026 Sree Balajee Scholars Hub. All rights reserved.</p>
+    <p>Established under Sree Balaji Educational Charitable Trust</p>
+    
+    <hr style="width: 50px; margin: 10px auto; border: 0; border-top: 1px solid #ccc;">
+    
+    <p style="font-size: 0.8rem; color: #57859e;">
+       <strong> Developed by Subhiksha R C & Vijayalaxmi</strong>
+    </p>
+</footer>
+    </footer>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const isLoggedIn = localStorage.getItem('userLoggedIn');
+        const userName = localStorage.getItem('userName');
+        const userPhone = localStorage.getItem('userPhone');
+        const userCourse = localStorage.getItem('userCourse');
+        const userEmail = localStorage.getItem('userEmail');
+
+        if (isLoggedIn === 'true' && userName) {
+            document.getElementById('loginNavItem').classList.add('hidden');
+            document.getElementById('profileNavItem').classList.remove('hidden');
+            
+            document.getElementById('navUserName').textContent = userName;
+            document.getElementById('dropdownName').textContent = userName;
+            document.getElementById('dropdownPhone').innerHTML = '<i class="fas fa-phone-alt"></i> ' + (userPhone || "No Number");
+            document.getElementById('dropdownCourse').textContent = (userCourse || "Student");
+
+            if (userEmail) {
+                const savedImage = localStorage.getItem('img_' + userEmail);
+                if (savedImage) {
+                    document.getElementById('navProfileImg').src = savedImage;
+                    document.getElementById('dropdownProfileImg').src = savedImage;
+                }
+            }
+        }
+    });
+
+    function toggleDropdown() {
+        const dropdown = document.getElementById('profileDropdown');
+        dropdown.classList.toggle('hidden');
+    }
+
+    function uploadImage(event) {
+        const file = event.target.files[0];
+        const userEmail = localStorage.getItem('userEmail');
+
+        if (file && userEmail) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgData = e.target.result;
+                document.getElementById('navProfileImg').src = imgData;
+                document.getElementById('dropdownProfileImg').src = imgData;
+                localStorage.setItem('img_' + userEmail, imgData); 
+            };
+            reader.readAsDataURL(file);
+        } else if (!userEmail) {
+            alert("Error: Cannot save image. Please login again.");
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('userLoggedIn');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userPhone');
+        localStorage.removeItem('userCourse');
+        localStorage.removeItem('userEmail');
+        alert("Logged out successfully!");
+        window.location.reload();
+    }
+
+    window.onclick = function(event) {
+        if (!event.target.closest('.profile-icon') && !event.target.closest('#profileDropdown')) {
+            const dropdown = document.getElementById('profileDropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+        }
+    }
+
+
+    const courseDetails = {
+        'BA': 'Bachelor of Arts: A comprehensive 3-year degree focusing on humanities and social sciences.',
+        'BCom': 'Bachelor of Commerce: A foundation for careers in business, accounting, and finance.',
+        'BCA': 'Bachelor of Computer Applications: Focuses on software development and IT applications.',
+        'BBA': 'Bachelor of Business Administration: Teaches leadership, marketing, and corporate operations.',
+        'MA': 'Master of Arts: Advanced specialization in humanities for research or academic roles.',
+        'MCom': 'Master of Commerce: Deep expertise in business management and accounting practices.',
+        'MCA': 'Master of Computer Applications: Advanced software engineering and system development.',
+        'MBA': 'Master of Business Administration: Builds leadership and entrepreneurial skills.',
+        'Diploma': 'Diploma Courses: Short-term training for specific technical skills.',
+        'PGD': 'Post Graduate Diploma: Professional certification to enhance industry-specific knowledge.'
+    };
+
+    function showCourse(courseName) {
+        const modal = document.getElementById('courseModal');
+        document.getElementById('modalTitle').innerText = courseName;
+        document.getElementById('modalDescription').innerText = courseDetails[courseName] || "Information coming soon.";
+        modal.style.display = 'flex';
+        modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('courseModal');
+        modal.style.display = 'none';
+        modal.classList.add('hidden');
+    }
+
+
+    function sendToWhatsApp(event) {
+        event.preventDefault(); 
+
+        const name = document.getElementById('wa-name').value;
+        const email = document.getElementById('wa-email').value;
+        const phone = document.getElementById('wa-phone').value;
+        const course = document.getElementById('wa-course').value;
+
+        const myWhatsAppNumber = "919902054254"; 
+
+        const encodedMessage =
+                               `Hi there! I saw the Sree Balajee Scholars Hub portal and I'm interested in making a course enquiry.%0A%0A` +
+                               `*Name:* ${name}%0A` +
+                               `*Email:* ${email}%0A` +
+                               `*Phone:* ${phone}%0A` +
+                               `*Course:* ${course}`;
+
+        const whatsappURL = `https://wa.me/${myWhatsAppNumber}?text=${encodedMessage}`;
+        window.open(whatsappURL, '_blank');
+    }
+    </script>
+</body>
+</html>

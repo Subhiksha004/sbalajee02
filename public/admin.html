@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Scholars Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .sidebar { height: 100vh; background: #343a40; color: white; padding-top: 20px; position: fixed; width: 250px; }
+        .sidebar a { color: #cfd2d6; text-decoration: none; display: block; padding: 10px 20px; cursor: pointer; transition: 0.3s; }
+        .sidebar a:hover, .sidebar a.active { background: #495057; color: white; border-left: 4px solid #0d6efd; }
+        .content { margin-left: 250px; padding: 30px; }
+        .card { border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h4 class="text-center mb-4">Scholars Hub</h4>
+        <a onclick="showSection('dashboard')" class="active" id="link-dashboard"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+        <a onclick="showSection('fees')" id="link-fees"><i class="fas fa-money-bill-wave me-2"></i> Manage Fees</a>
+        <a onclick="showSection('curriculum')" id="link-curriculum"><i class="fas fa-book me-2"></i> Manage Curriculum</a> 
+        <a href="#" onclick="logout()" class="text-danger mt-5"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+    </div>
+
+    <div class="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Admin Dashboard</h2>
+            <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold">Admin</span>
+                <i class="fas fa-user-circle fa-2x text-secondary"></i>
+            </div>
+        </div>
+
+        <div id="sec-dashboard">
+            <div class="row mb-4">
+                <div class="col-md-4"><div class="card p-3 bg-primary text-white"><h5>Total Students</h5><h2 id="totalCount">0</h2></div></div>
+                <div class="col-md-4"><div class="card p-3 bg-success text-white"><h5>Active Courses</h5><h2>4</h2></div></div>
+            </div>
+            
+            <div class="card p-4">
+                <h4>Registered Students</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover mt-3 align-middle">
+                        <thead class="table-dark"><tr><th>ID</th><th>Name</th><th>Email</th><th>Course</th><th>Status</th><th>Action</th></tr></thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="sec-fees" class="hidden">
+            <div class="card p-4 border-start border-5 border-success">
+                <h4><i class="fas fa-coins text-success"></i> Course Fee Manager</h4>
+                <div class="row g-3 mt-2">
+                    <div class="col-md-3"><label>MBA Fee</label><input type="number" id="feeMBA" class="form-control" value="100000"></div>
+                    <div class="col-md-3"><label>B.Tech Fee</label><input type="number" id="feeBTech" class="form-control" value="80000"></div>
+                    <div class="col-md-3"><label>MCA Fee</label><input type="number" id="feeMCA" class="form-control" value="60000"></div>
+                    <div class="col-md-3"><label>BCA Fee</label><input type="number" id="feeBCA" class="form-control" value="40000"></div>
+                </div>
+                <button onclick="updateFees()" class="btn btn-success mt-3">Update Fees</button>
+            </div>
+        </div>
+
+        <div id="sec-curriculum" class="hidden">
+            <div class="card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4><i class="fas fa-book-open text-primary"></i> Curriculum Manager</h4>
+                    <select id="courseSelect" class="form-select w-auto fw-bold" onchange="loadCurriculum()">
+                        <option value="MBA">MBA</option>
+                        <option value="B.Tech">B.Tech</option>
+                        <option value="MCA">MCA</option>
+                        <option value="Degree">Degree</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="card bg-light p-3">
+                            <h5 class="text-primary"><i class="fas fa-book"></i> Subjects</h5>
+                            <hr>
+                            <div class="d-flex gap-2 mb-2">
+                                <input type="text" id="subName" placeholder="Subject Name" class="form-control">
+                                <input type="text" id="subCode" placeholder="Code" class="form-control w-25">
+                            </div>
+                            <input type="text" id="subProf" placeholder="Professor Name" class="form-control mb-2">
+                            <button onclick="addSubject()" class="btn btn-primary w-100 mb-3">Add Subject</button>
+                            
+                            <ul id="subjectList" class="list-group" style="max-height: 400px; overflow-y: auto;">
+                                </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="card p-3 border border-primary">
+                            <h5 class="text-primary"><i class="fas fa-calendar-alt"></i> Exam Schedule</h5>
+                            <hr>
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-4">
+                                    <label class="small text-muted">Exam Date</label>
+                                    <input type="date" id="examDate" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="small text-muted">Time</label>
+                                    <input type="time" id="examTime" class="form-control">
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="small text-muted">Subject</label>
+                                    <input type="text" id="examSubject" class="form-control" placeholder="e.g. Mathematics">
+                                </div>
+                                <div class="col-12">
+                                    <button onclick="addExam()" class="btn btn-warning w-100 fw-bold">Schedule Exam</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered text-center table-sm">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                            <th>Subject</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="examList">
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail !== 'admin@gmail.com') {
+            alert("Access Denied. Admins only.");
+            window.location.href = "index.html";
+        }
+
+        function showSection(sec) {
+            ['dashboard', 'fees', 'curriculum'].forEach(s => {
+                document.getElementById('sec-' + s).classList.add('hidden');
+                document.getElementById('link-' + s).classList.remove('active');
+            });
+            document.getElementById('sec-' + sec).classList.remove('hidden');
+            document.getElementById('link-' + sec).classList.add('active');
+            if(sec === 'curriculum') loadCurriculum(); 
+        }
+
+        fetchUsers();
+        function fetchUsers() {
+            fetch('/api/users')
+                .then(res => res.json())
+                .then(users => {
+                    const tbody = document.getElementById('tableBody');
+                    tbody.innerHTML = '';
+                    let studentCount = 0;
+                    users.forEach(user => {
+                        if(user.email === 'admin@gmail.com') return;
+                        studentCount++;
+                        let badge = user.status === 'Accepted' ? '<span class="badge bg-success">Accepted</span>' : '<span class="badge bg-warning text-dark">Pending</span>';
+                        let acceptBtn = user.status === 'Accepted' ? `<button class="btn btn-sm btn-secondary" disabled>Enrolled</button>` : `<button onclick="acceptUser(${user.id})" class="btn btn-sm btn-success">Accept</button>`;
+                        tbody.innerHTML += `<tr><td>${user.id}</td><td>${user.fullName}</td><td>${user.email}</td><td>${user.course}</td><td>${badge}</td><td>${acceptBtn} <button onclick="deleteUser(${user.id})" class="btn btn-sm btn-danger ms-2"><i class="fas fa-trash"></i></button></td></tr>`;
+                    });
+                    document.getElementById('totalCount').innerText = studentCount;
+                });
+        }
+
+        function acceptUser(id) { fetch(`/api/users/${id}/accept`, { method: 'PUT' }).then(() => fetchUsers()); }
+        function deleteUser(id) { if(confirm("Delete student?")) fetch(`/api/users/${id}`, { method: 'DELETE' }).then(() => fetchUsers()); }
+
+    
+        function loadCurriculum() {
+            const course = document.getElementById('courseSelect').value;
+            fetch(`/api/curriculum/${course}`)
+                .then(res => res.json())
+                .then(data => {
+                    
+                    const subList = document.getElementById('subjectList');
+                    subList.innerHTML = '';
+                    data.subjects.forEach(s => {
+                        subList.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center"><div><strong>${s.name}</strong><br><small>${s.prof}</small></div><button onclick="removeSubject(${s.id})" class="btn btn-danger btn-sm text-white">&times;</button></li>`;
+                    });
+
+                
+                    const examList = document.getElementById('examList');
+                    examList.innerHTML = '';
+                    if (data.exams && data.exams.length > 0) {
+                        data.exams.forEach(e => {
+                        
+                            const dateObj = new Date(e.date);
+                            const dateStr = dateObj.toLocaleDateString();
+                            
+                            examList.innerHTML += `
+                                <tr>
+                                    <td>${dateStr}</td>
+                                    <td>${e.time}</td>
+                                    <td>${e.subject}</td>
+                                    <td><button onclick="removeExam(${e.id})" class="btn btn-sm btn-danger">&times;</button></td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        examList.innerHTML = `<tr><td colspan="4" class="text-muted">No exams scheduled yet.</td></tr>`;
+                    }
+                });
+        }
+
+        function addSubject() {
+            const course = document.getElementById('courseSelect').value;
+            const subject = { name: document.getElementById('subName').value, prof: document.getElementById('subProf').value, code: document.getElementById('subCode').value };
+            if(!subject.name) return alert("Enter subject name");
+            fetch(`/api/curriculum/${course}/subjects`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(subject) }).then(() => { loadCurriculum(); document.getElementById('subName').value=''; });
+        }
+
+        function removeSubject(id) {
+            fetch(`/api/curriculum/subjects/${id}`, { method: 'DELETE' }).then(() => loadCurriculum());
+        }
+
+    
+        function addExam() {
+            const course = document.getElementById('courseSelect').value;
+            const date = document.getElementById('examDate').value;
+            const time = document.getElementById('examTime').value;
+            const subject = document.getElementById('examSubject').value;
+
+            if(!date || !time || !subject) return alert("Please fill all exam details");
+
+            fetch(`/api/curriculum/${course}/exam`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ date, time, subject })
+            }).then(() => {
+                alert("Exam Scheduled!");
+                loadCurriculum(); 
+                document.getElementById('examSubject').value = '';
+            });
+        }
+
+        function removeExam(id) {
+            if(confirm("Remove this exam?")) {
+                fetch(`/api/curriculum/exam/${id}`, { method: 'DELETE' }).then(() => loadCurriculum());
+            }
+        }
+
+        function updateFees() {
+            const fees = { MBA: document.getElementById('feeMBA').value, BTech: document.getElementById('feeBTech').value, MCA: document.getElementById('feeMCA').value, BCA: document.getElementById('feeBCA').value };
+            localStorage.setItem('courseFees', JSON.stringify(fees));
+            alert("Fees Updated!");
+        }
+
+        function logout() { localStorage.clear(); window.location.href = "login.html"; }
+    </script>
+</body>
+</html>
